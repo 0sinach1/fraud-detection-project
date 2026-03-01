@@ -4,8 +4,8 @@ Machine learning system detecting fraudulent transactions in mobile payment plat
 
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://python.org)
 [![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.2.2-orange.svg)](https://scikit-learn.org)
-[![Recall](https://img.shields.io/badge/Recall-94%25-brightgreen.svg)]()
-[![Precision](https://img.shields.io/badge/Precision-89%25-green.svg)]()
+[![Recall](https://img.shields.io/badge/Recall-99.0%25-brightgreen.svg)]()
+[![Precision](https://img.shields.io/badge/Precision-51.4%25-green.svg)]()
 
 ---
 
@@ -67,38 +67,37 @@ A classification model that detects fraudulent mobile money transactions using:
 
 ---
 
-## 📊 Key Results
+## Key Results
 
-### Model Performance
-- **Recall:** 94% (catches 94 out of 100 fraudulent transactions)
-- **Precision:** 89% (89% of flagged transactions are actually fraud)
-- **F1-Score:** 0.91
-- **ROC-AUC:** 0.96 (excellent discrimination between fraud and legitimate)
+### Model Performance (Threshold = 0.9)
+- **Precision:** 51.4% (1 in 2 fraud flags is real fraud)
+- **Recall:** 99.0% (catches 99% of all fraud)
+- **F1-Score:** 0.676
+- **ROC-AUC:** 0.999 (near-perfect discrimination)
 
 ### Business Impact
-- **94% fraud detection rate** vs 65-70% industry average
-- **40% reduction in false positives** compared to baseline
-- Potential savings: **₦88M annually** for a mid-sized fintech (based on 50K daily transactions)
-- **99.2% of legitimate transactions** pass through without friction
+- **False Positives:** 1,917 (vs 228,598 baseline - 99.2% reduction)
+- **False Negatives:** 21 fraudsters missed (vs 374 baseline - 94% reduction)
+- **Fraud Detection Rate:** 2,024 out of 2,045 fraudsters caught
+- **Potential Annual Savings:** ₦500M+ for mid-sized fintech
 
 ### Model Comparison
-| Model | Recall | Precision | F1-Score | ROC-AUC |
-|-------|--------|-----------|----------|---------|
-| Logistic Regression | 0.78 | 0.72 | 0.75 | 0.88 |
-| Random Forest | 0.89 | 0.83 | 0.86 | 0.93 |
-| **XGBoost (Final)** | **0.94** | **0.89** | **0.91** | **0.96** |
+| Model | Precision | Recall | F1-Score | False Positives |
+|-------|-----------|--------|----------|-----------------|
+| Logistic Regression (Baseline) | 2.0% | 93.0% | 0.04 | 228,598 |
+| **XGBoost + SMOTE (Final)** | **51.4%** | **99.0%** | **0.68** | **1,917** |
 
-**Why Recall Matters:** Missing a fraudulent transaction costs ₦50k-₦500k on average. Missing 6% instead of 22% saves millions.
+**Improvement:** 25x better precision, 99% fewer false alarms, 17x better F1-score
 
 ---
 
 ## 📦 Dataset
 
 **Source:** Synthetic dataset based on real-world Nigerian mobile money patterns  
-**Size:** 284,807 transactions  
+**Size:** 6,362,620 transactions  
 **Class Distribution:** 
-- Legitimate: 284,315 (99.8%)
-- Fraudulent: 492 (0.2%)
+- Legitimate: 1,588,610 (99.8%)
+- Fraudulent: 2045 (0.2%)
 
 **Time Period:** Jan 2024 - Dec 2024  
 **Coverage:** OPay, PalmPay, Kuda-like transaction patterns
@@ -235,53 +234,34 @@ Best Parameters:
 - Better to be cautious: recall > precision
 
 **Threshold Tuning Results:**
-- Threshold 0.5: Recall 87%, Precision 93%
-- **Threshold 0.3: Recall 94%, Precision 89%** ✅
+- Threshold 0.9: Recall 99.0%, Precision 51.4%%
+- **Threshold 0.9: Recall 99.0%, Precision 51.4%** ✅
 
 ---
 
 ## 📈 Visualizations
 
-### 1. Class Distribution (Before vs After SMOTE)
-![Class Distribution](images/class_distribution.png)
 
-*Original data is heavily imbalanced (99.8% legitimate). SMOTE creates synthetic fraud samples for better model training.*
-
-### 2. Feature Importance
-![Feature Importance](images/feature_importance.png)
-
-*Recipient risk score and unusual transaction amounts are the strongest fraud indicators.*
-
-### 3. Confusion Matrix
+### 1. Confusion Matrix
 ![Confusion Matrix](images/confusion_matrix.png)
 
 **Interpretation:**
-- True Positives: 92 fraud cases correctly caught
-- False Negatives: 6 fraud cases missed (6% miss rate)
-- True Negatives: 56,840 legitimate transactions correctly approved
-- False Positives: 7,015 legitimate flagged as fraud (11% false alarm)
+True Negatives:  1,584,507 (Correctly identified legitimate)
+False Positives: 4,103 (Wrongly flagged as fraud)
+False Negatives: 12 (Missed fraudsters)
+True Positives:  2,033 (Caught fraudsters)
 
 **Trade-off:** We accept 11% false alarms to catch 94% of fraud.
 
-### 4. ROC Curve
+### 2. ROC Curve
 ![ROC Curve](images/roc_curve.png)
 
 *ROC-AUC of 0.96 indicates excellent model discrimination. The curve hugs the top-left corner (ideal).*
 
-### 5. Precision-Recall Curve
+### 3. Precision-Recall Curve
 ![Precision-Recall](images/precision_recall.png)
 
 *Shows the trade-off between catching fraud (recall) and avoiding false alarms (precision). Our operating point (red dot) balances both.*
-
-### 6. Transaction Amount Distribution (Fraud vs Legitimate)
-![Amount Distribution](images/amount_distribution.png)
-
-*Fraudulent transactions tend to cluster at higher amounts (₦50k-₦150k) and very low amounts (< ₦500).*
-
-### 7. Fraud by Time of Day
-![Fraud by Hour](images/fraud_by_hour.png)
-
-*Fraud peaks at 2am-5am (67% of fraud) when legitimate activity is lowest. Fraudsters exploit reduced monitoring.*
 
 ---
 
@@ -527,7 +507,7 @@ Specializing in Fraud Detection & Risk Analytics
 📧 **Email:** osimachifeanyi@gmail.com  
 💼 **LinkedIn:** [linkedin.com/in/osinachi-ifeanyi](https://linkedin.com/in/osinachi-ifeanyi)  
 🐙 **GitHub:** [@0sinach1](https://github.com/0sinach1)  
-🌐 **Portfolio:** [Coming Soon]
+🌐 **Portfolio:** [Ifeayi Osinachi](https://ifeanyiosinachi.vercel.app/)
 
 ---
 
